@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SK bank website</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.css">
+    <link rel="shortcut icon" href="https://stainlezzking.github.io/assets/logo.png" type="image/x-icon">
+</head>
+<body>
+  <nav class="navbar navbar-expand-sm navbar-light bg-success">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Bank $</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/signup">Sign up</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="/login">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logOut">LogOut</a>
+          </li>
+          <li class="nav-item ml-auto">
+            <a class="nav-link " href="/profile" >Profile</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+    <style>
+      .active {
+        font-weight: 500;
+      }
+      body {
+        background-image: url("https://th.bing.com/th/id/R91efdd8e5d9706433df45401b86085ef?rik=Ef4mplTsf0NJ0g&riu=http%3a%2f%2fwallup.net%2fwp-content%2fuploads%2f2015%2f12%2f169814-landscape-Dubai-city-night.jpg&ehk=%2fxYrpEs1ZHGU2VaZ%2fV0KkI18XvpSd8KvEcNYMdtM4ns%3d&risl=1&pid=ImgRaw");
+        background-position: center;
+        background-size: stretch;
+        background-repeat: no-repeat;
+        
+       
+      }
+    </style>
+
+    <div class="container p-3 mt-3">
+        <form class="row g-3  text-white text-uppercase">
+          <div class="col-12">
+            <div class=" col-6 col-sm-2 col-lg-1 mx-auto">
+              <img src="https://logodix.com/logo/733020.jpg" class="img-thumbnail" alt="...">
+            </div>
+          </div>
+            <div class="col-lg-5 mx-auto">
+              <label for="inputEmail4" class="form-label">username</label>
+              <input type="text" class="form-control" id="inputEmail" name="username">
+            </div>
+            <div class="col-12"></div>
+            <div class="col-lg-5 mx-auto">
+              <label for="inputPassword4" class="form-label">Password</label>
+              <input type="password" class="form-control" id="inputPassword" name="password">
+            </div>
+            <div class="col-12"></div>
+            <div class="col-lg-5 mx-auto">
+              <label for="inputPassword4" class="form-label"> confirm Password</label>
+              <input type="password" class="form-control" id="confirmPassword4" name="Cpassword">
+            </div>
+            <div class="col-12"></div>
+            </div>
+            <div class="col-12 ">
+              <button type="submit" class="btn btn-primary d-block mx-auto">Create Account</button>
+            </div>
+          </form>
+    </div>
+    <%- include("./modal.ejs") %>
+    <script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
+    <script>
+       const myModel = new bootstrap.Modal(document.querySelector('.modal'), {
+            focus : true
+        })
+        document.querySelector("form").addEventListener("submit", function(e){
+          e.preventDefault()
+          data = {
+            username :  document.querySelector("form").username.value.trim(),
+            password :  document.querySelector("form").password.value.trim(),
+            confirm :  document.querySelector("form").Cpassword.value.trim()
+          }
+          fetch("/signup", {
+            method : "POST",
+            headers : {"content-Type":"application/json"},
+            body : JSON.stringify(data)
+          }).then(async(data)=>{
+            var datas = await data.json()
+            console.log(datas)
+            document.querySelector(".modal-body").innerText = datas.err
+            myModel.show()
+          }).catch(err=>{
+            document.querySelector(".modal-body").innerText = err.message
+            myModel.show()
+          })
+        })
+    </script>
+</body>
+</html>

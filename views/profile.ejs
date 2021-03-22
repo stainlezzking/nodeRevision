@@ -1,0 +1,114 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your profile</title>
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.css">
+</head>
+    <style>
+        textarea::placeholder{
+            padding:.3rem 1rem;
+            color: rgb(223, 223, 223);
+        }
+    </style>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-light bg-success">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Bank $</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/signup">Sign up</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link " href="/login">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/logOut">LogOut</a>
+              </li>
+              <li class="nav-item ml-auto">
+                <a class="nav-link active" href="/profile" >Profile</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    <div class="container py-5 ">
+        <div class="row">
+            <div class="col-md-4">
+                <img src="https://weneedfun.com/wp-content/uploads/2016/07/HD-Girls-Profile-Photos-6.jpg" class="img-fluid bg-light" alt="your profile picture">
+            </div>
+            <div class="col-md-2">
+
+            </div>
+            <div class=" card col-md-5">
+            <div class="card-body">
+                <h4 class="username"> Username : <span class="h6"> This is your username</span></h4> 
+                <h4 class="motto"> motto : <span class="h6"> This is your username</span></h4> 
+                <input onclick="show(this)" class="btn w-40 btn-secondary align-self-center" value=" Edit" type="button" >
+                <form class="d-none">
+                    <textarea name="" id="" cols="30"  rows="5" maxlength="100" placeholder="change your motto" ></textarea>
+                    <button  class="btn btn-success w-50 mx-auto mb-2">change</button>
+                    <button  class="btn btn-primary w-50 mx-auto" onclick="cancel(this)" > cancel</button>
+                </form>
+            </div>
+            </div>
+          
+        </div>
+    </div>
+    <%- include("./modal.ejs") %>
+    <script src="/static/bootstrap/js/bootstrap.bundle.js"></script>
+    <script>
+
+
+        const myModal = new bootstrap.Modal(document.querySelector('.modal'), {
+            focus : true
+        })
+        function show(e){
+            console.log(e)
+            document.querySelectorAll(".card h4").forEach(h4=> h4.classList.add("d-none"))
+            document.querySelector(".card form").classList = "text-center pt-2"
+            e.classList.add("d-none")
+        }
+
+        function cancel(e){
+            document.querySelector(".card form").reset()
+            document.querySelectorAll(".card h4").forEach(h4=> h4.classList.remove("d-none"))
+            document.querySelector(".card form").classList = "d-none"
+            document.querySelector(".card-body input").classList.remove("d-none")
+        }
+        document.querySelector(".card form").addEventListener("submit", function(e){
+           console.log(e)
+           e.preventDefault()
+        })
+
+        document.querySelector("button.btn.btn-success").addEventListener("click", function(e){
+         const data = { motto : document.querySelector(".card form textarea").value.trim() }
+         if(data.motto){
+            fetch("/info", {
+               headers: {"content-Type": "application/json"},
+               method : "POST",
+               body : JSON.stringify(data)
+           }).then(async(data)=>{
+               paste = await data.json()
+               document.querySelector(".card-body .motto span").innerText = paste.motto
+               cancel(document.querySelector(".crad form btn-primary"))
+               document.querySelector(".card form").reset()
+           })
+          
+         } else{
+               myModal.show()
+           }
+           
+        })
+    </script>
+</body>
+</html>
+
